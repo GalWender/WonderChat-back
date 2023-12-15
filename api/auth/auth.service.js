@@ -1,7 +1,10 @@
 const bcrypt = require('bcrypt')
 const userService = require('../user/user.service')
+const channelService = require('../channel/channel.service')
 const logger = require('../../services/logger.service')
+const utilService = require('../../services/util.service')
 const Cryptr = require('cryptr')
+
 const cryptr = new Cryptr(process.env.CRYPTR_SECRET)
 
 
@@ -27,12 +30,14 @@ async function login(email, password) {
 
 async function signup(username, password, name, email, birthday) {
     const saltRounds = 10
-
-    logger.debug(`auth.service - signup with username: ${email}, name: ${name}`)
+    const ID = utilService.makeId(24)
+    logger.debug(`auth.service - signup with email: ${email}, name: ${name}`)
     if (!username || !password || !name || !email || !birthday) return Promise.reject('name, username, emial, birthday and password are required!')
 
     const hash = await bcrypt.hash(password, saltRounds)
-    return userService.add({ username, password: hash, name, email, birthday })
+    const signedUser = userService.add({ _id: ID, username, password: hash, name, email, birthday })
+    channelService.add({ logoSrc: "", participantsIds: [ID], name: "Direct Messages", isDirectMessages: true })
+    return signedUser
 }
 
 function getLoginToken(user) {

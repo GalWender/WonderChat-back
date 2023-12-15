@@ -96,6 +96,7 @@ async function add(user) {
     try {
         // peek only updatable fields!
         const userToAdd = {
+            _id:user._id,
             username: user.username,
             password: user.password,
             name: user.name,

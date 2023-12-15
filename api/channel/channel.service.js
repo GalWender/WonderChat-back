@@ -8,6 +8,7 @@ async function query(filterBy) {
         const criteria = _buildCriteria(filterBy)
         const collection = await dbService.getCollection('channel')
         var channels = await collection.find(criteria).toArray()
+        // return channels.filter((channel)=>channel.participantsIds.includes())
         return channels
     } catch (err) {
         logger.error('cannot find channels', err)
@@ -39,8 +40,10 @@ async function remove(channelId) {
 
 async function add(channel) {
     try {
+        // const channelToAdd = { ...channel, isDirectMessages: channel.isDirectMessages ? channel.isDirectMessages : false }
+        const channelToAdd = { ...channel}
         const collection = await dbService.getCollection('channel')
-        await collection.insertOne(channel)
+        await collection.insertOne(channelToAdd)
         return channel
     } catch (err) {
         logger.error('cannot insert channel', err)
@@ -74,10 +77,11 @@ async function update(channel) {
 // }
 
 function _buildCriteria(filterBy) {
+    // console.log('filter in build',filterBy.userId);
     const criteria = {}
     if (!filterBy) return criteria
     // if (filterBy.maxPrice && filterBy.maxPrice !== 0) criteria.price = { $lte: +filterBy.maxPrice }
-    // if (filterBy.term) criteria.name = { $regex: filterBy.term, $options: 'i' }
+    if (filterBy.userId) criteria.participantsIds = { $in: [filterBy.userId] }
     // if (filterBy.labels && filterBy.labels.length > 0) criteria.labels = { $all: filterBy.labels }
     // if (filterBy.inStock) criteria.inStock = { $eq: filterBy.inStock }
     // if (filterBy.inStock) criteria.inStock = { $eq: (filterBy.inStock === 'true') }
