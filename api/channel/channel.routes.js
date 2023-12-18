@@ -10,4 +10,6 @@ router.post('/', addChannel)
 router.put('/:channelId', updateChannel)
 router.delete('/:channelId', removeChannel)
 
+//use canse of '/channels/:channelId' path
+
 module.exports = router
