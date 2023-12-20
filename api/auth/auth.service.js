@@ -29,7 +29,7 @@ async function login(email, password) {
 }
 
 async function signup(username, password, name, email, birthday) {
-    const saltRounds = 10
+    const saltRounds = 12
     const ID = utilService.makeId(24)
     logger.debug(`auth.service - signup with email: ${email}, name: ${name}`)
     if (!username || !password || !name || !email || !birthday) return Promise.reject('name, username, emial, birthday and password are required!')

@@ -1,6 +1,7 @@
 const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
 const utilService = require('../../services/util.service')
+const chatService = require('../chat/chat.service')
 const ObjectId = require('mongodb').ObjectId
 
 async function query(filterBy) {
@@ -41,10 +42,12 @@ async function remove(channelId) {
 async function add(channel) {
     try {
         // const channelToAdd = { ...channel, isDirectMessages: channel.isDirectMessages ? channel.isDirectMessages : false }
-        const channelToAdd = { ...channel}
+        const ID = utilService.makeId(24)
+        const channelToAdd = { _id: ID, ...channel }
         const collection = await dbService.getCollection('channel')
         await collection.insertOne(channelToAdd)
-        return channel
+        chatService.add({ channelId: ID, name: "general", isDirectMessages: false })
+        return channelToAdd
     } catch (err) {
         logger.error('cannot insert channel', err)
         throw err
