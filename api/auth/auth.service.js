@@ -3,6 +3,7 @@ const userService = require('../user/user.service')
 const channelService = require('../channel/channel.service')
 const logger = require('../../services/logger.service')
 const utilService = require('../../services/util.service')
+const ObjectId = require('mongodb').ObjectId;
 const Cryptr = require('cryptr')
 
 const cryptr = new Cryptr(process.env.CRYPTR_SECRET)
@@ -27,10 +28,10 @@ async function login(email, password) {
     user._id = user._id.toString()
     return user
 }
-
+//fix Object id error in chats here and channels    
 async function signup(username, password, name, email, birthday) {
     const saltRounds = 12
-    const ID = utilService.makeId(24)
+    const ID = ObjectId(utilService.makeId(24))
     logger.debug(`auth.service - signup with email: ${email}, name: ${name}`)
     if (!username || !password || !name || !email || !birthday) return Promise.reject('name, username, emial, birthday and password are required!')
 
