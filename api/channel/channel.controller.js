@@ -17,7 +17,6 @@ async function getChannels(req, res) {
 //?- GET BY ID
 async function getChannel(req, res) {
     try {
-        console.log(req.params);
         logger.debug('Getting Channel')
         const { channelId } = req.params
         const channel = await channelService.getById(channelId)

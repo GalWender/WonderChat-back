@@ -80,7 +80,6 @@ async function update(channel) {
 
 function _buildCriteria(filterBy) {
     console.log(filterBy);
-    // console.log('filter in build',filterBy.userId);
     const criteria = {}
     if (!filterBy) return criteria
     // if (filterBy.maxPrice && filterBy.maxPrice !== 0) criteria.price = { $lte: +filterBy.maxPrice }
