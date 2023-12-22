@@ -9,7 +9,6 @@ async function query(filterBy) {
         const criteria = _buildCriteria(filterBy)
         const collection = await dbService.getCollection('channel')
         var channels = await collection.find(criteria).toArray()
-        // return channels.filter((channel)=>channel.participantsIds.includes())
         return channels
     } catch (err) {
         logger.error('cannot find channels', err)
@@ -42,7 +41,7 @@ async function remove(channelId) {
 async function add(channel) {
     try {
         // const channelToAdd = { ...channel, isDirectMessages: channel.isDirectMessages ? channel.isDirectMessages : false }
-        const ID = ObjectId(utilService.makeId(24))
+        const ID = new ObjectId()
         const channelToAdd = { _id: ID, ...channel }
         const collection = await dbService.getCollection('channel')
         await collection.insertOne(channelToAdd)
@@ -80,6 +79,7 @@ async function update(channel) {
 // }
 
 function _buildCriteria(filterBy) {
+    console.log(filterBy);
     // console.log('filter in build',filterBy.userId);
     const criteria = {}
     if (!filterBy) return criteria

@@ -31,13 +31,13 @@ async function login(email, password) {
 //fix Object id error in chats here and channels    
 async function signup(username, password, name, email, birthday) {
     const saltRounds = 12
-    const ID = ObjectId(utilService.makeId(24))
+    const ID = new ObjectId()
     logger.debug(`auth.service - signup with email: ${email}, name: ${name}`)
     if (!username || !password || !name || !email || !birthday) return Promise.reject('name, username, emial, birthday and password are required!')
 
     const hash = await bcrypt.hash(password, saltRounds)
     const signedUser = userService.add({ _id: ID, username, password: hash, name, email, birthday })
-    channelService.add({ logoSrc: "", participantsIds: [ID], name: "Direct Messages", isDirectMessages: true })
+    channelService.add({ logoSrc: "", participantsIds: [ID.toString()], name: "Direct Messages", isDirectMessages: true })
     return signedUser
 }
 
