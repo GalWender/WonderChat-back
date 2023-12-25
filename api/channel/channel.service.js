@@ -45,7 +45,9 @@ async function add(channel) {
         const channelToAdd = { _id: ID, ...channel }
         const collection = await dbService.getCollection('channel')
         await collection.insertOne(channelToAdd)
-        chatService.add({ channelId: ID, name: "general", isDirectMessages: false })
+        if (channelToAdd.isDirectMessages === false) {
+            chatService.add({ channelId: ID.toString(), name: "general", isDirectMessages: false })
+        }
         return channelToAdd
     } catch (err) {
         logger.error('cannot insert channel', err)
@@ -79,7 +81,7 @@ async function update(channel) {
 // }
 
 function _buildCriteria(filterBy) {
-    console.log(filterBy);
+    // console.log(filterBy);
     const criteria = {}
     if (!filterBy) return criteria
     // if (filterBy.maxPrice && filterBy.maxPrice !== 0) criteria.price = { $lte: +filterBy.maxPrice }

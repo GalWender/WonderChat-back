@@ -40,6 +40,7 @@ async function remove(chatId) {
 
 async function add(chat) {
     try {
+        console.log('adding chat',chat);
         // const chatToAdd = { ...chat, isDirectMessages: chat.isDirectMessages ? chat.isDirectMessages : false }
         const chatToAdd = { ...chat}
         const collection = await dbService.getCollection('chat')
@@ -81,7 +82,7 @@ function _buildCriteria(filterBy) {
     if (!filterBy) return criteria
     // if (filterBy.maxPrice && filterBy.maxPrice !== 0) criteria.price = { $lte: +filterBy.maxPrice }
     // if (filterBy.userId) criteria.participantsIds = { $in: [filterBy.userId] }
-    if (filterBy.channelId) criteria.channelId = ObjectId(filterBy.channelId);
+    if (filterBy.channelId) criteria.channelId = filterBy.channelId;
     // if (filterBy.labels && filterBy.labels.length > 0) criteria.labels = { $all: filterBy.labels }
     // if (filterBy.inStock) criteria.inStock = { $eq: filterBy.inStock }
     // if (filterBy.inStock) criteria.inStock = { $eq: (filterBy.inStock === 'true') }
