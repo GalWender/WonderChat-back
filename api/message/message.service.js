@@ -40,9 +40,9 @@ async function remove(messageId) {
 
 async function add(message) {
     try {
-        console.log('adding message',message);
+        console.log('adding message', message);
         // const messageToAdd = { ...message, isDirectMessages: message.isDirectMessages ? message.isDirectMessages : false }
-        const messageToAdd = { ...message}
+        const messageToAdd = { ...message }
         const collection = await dbService.getCollection('message')
         await collection.insertOne(messageToAdd)
         return messageToAdd
@@ -82,7 +82,7 @@ function _buildCriteria(filterBy) {
     if (!filterBy) return criteria
     // if (filterBy.maxPrice && filterBy.maxPrice !== 0) criteria.price = { $lte: +filterBy.maxPrice }
     // if (filterBy.userId) criteria.participantsIds = { $in: [filterBy.userId] }
-    if (filterBy.channelId) criteria.channelId = filterBy.channelId;
+    if (filterBy.userId) criteria.messageBy = filterBy.userId
     // if (filterBy.labels && filterBy.labels.length > 0) criteria.labels = { $all: filterBy.labels }
     // if (filterBy.inStock) criteria.inStock = { $eq: filterBy.inStock }
     // if (filterBy.inStock) criteria.inStock = { $eq: (filterBy.inStock === 'true') }

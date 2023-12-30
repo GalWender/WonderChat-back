@@ -26,9 +26,24 @@ function setupSocketAPI(http) {
             logger.debug(`Socket is joining channel ${socket.chatChannel} [id: ${socket.id}]`)
         })
         socket.on('test-send-changes', test => {
-                // logger.info(`Board changes from socket [id: ${socket.id}], emitting to topic ${socket.boardChannel}`)
-                gIo.to(socket.chatChannel).emit('test-add-changes', test)
-            })
+            // logger.info(`Board changes from socket [id: ${socket.id}], emitting to topic ${socket.boardChannel}`)
+            gIo.to(socket.chatChannel).emit('test-add-changes', test)
+        })
+
+        socket.on('message-set-channel', channel => {
+            if (socket.messageChannel === channel) return
+            if (socket.messageChannel) {
+                socket.leave(socket.messageChannel)
+                logger.info(`Socket is leaving channel ${socket.messageChannel} [id: ${socket.id}]`)
+            }
+            socket.join(channel)
+            socket.messageChannel = channel
+            logger.debug(`Socket is joining channel ${socket.messageChannel} [id: ${socket.id}]`)
+        });
+        
+        socket.on('message-send-changes', message => {
+            gIo.to(socket.messageChannel).emit('message-add-changes', message);
+        });
 
         // socket.on('board-set-channel', channel => {
         //     if (socket.boardChannel === channel) return
@@ -60,14 +75,14 @@ function setupSocketAPI(http) {
         //     gIo.to(socket.taskChannel).emit('task-add-changes', task)
         // })
 
-        // socket.on('set-user-socket', userId => {
-        //     logger.info(`Setting socket.userId = ${userId} for socket [id: ${socket.id}]`)
-        //     socket.userId = userId
-        // })
-        // socket.on('unset-user-socket', () => {
-        //     logger.info(`Removing socket.userId for socket [id: ${socket.id}]`)
-        //     delete socket.userId
-        // })
+        socket.on('set-user-socket', userId => {
+            logger.info(`Setting socket.userId = ${userId} for socket [id: ${socket.id}]`)
+            socket.userId = userId
+        })
+        socket.on('unset-user-socket', () => {
+            logger.info(`Removing socket.userId for socket [id: ${socket.id}]`)
+            delete socket.userId
+        })
 
     })
 }
