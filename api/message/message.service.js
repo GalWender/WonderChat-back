@@ -41,8 +41,6 @@ async function remove(messageId) {
 
 async function add(message) {
     try {
-        console.log('adding message', message);
-        // const messageToAdd = { ...message, isDirectMessages: message.isDirectMessages ? message.isDirectMessages : false }
         const messageToAdd = { ...message }
         const collection = await dbService.getCollection('message')
         await collection.insertOne(messageToAdd)

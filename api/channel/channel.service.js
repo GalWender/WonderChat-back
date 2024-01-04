@@ -40,7 +40,6 @@ async function remove(channelId) {
 
 async function add(channel) {
     try {
-        // const channelToAdd = { ...channel, isDirectMessages: channel.isDirectMessages ? channel.isDirectMessages : false }
         const ID = new ObjectId()
         const channelToAdd = { _id: ID, ...channel }
         const collection = await dbService.getCollection('channel')

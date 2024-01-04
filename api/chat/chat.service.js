@@ -40,8 +40,6 @@ async function remove(chatId) {
 
 async function add(chat) {
     try {
-        console.log('adding chat',chat);
-        // const chatToAdd = { ...chat, isDirectMessages: chat.isDirectMessages ? chat.isDirectMessages : false }
         const chatToAdd = { ...chat}
         const collection = await dbService.getCollection('chat')
         await collection.insertOne(chatToAdd)
