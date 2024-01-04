@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb')
 const logger = require('./logger.service')
 // const boardService = require('../api/board/board.service')
 
@@ -15,22 +16,23 @@ function setupSocketAPI(http) {
             logger.info(`Socket disconnected [id: ${socket.id}]`)
         })
 
-        socket.on('test-set-channel', channel => {
-            if (socket.chatChannel === channel) return
-            if (socket.chatChannel) {
-                socket.leave(socket.chatChannel)
-                logger.info(`Socket is leaving channel ${socket.chatChannel} [id: ${socket.id}]`)
-            }
-            socket.join(channel)
-            socket.chatChannel = channel
-            logger.debug(`Socket is joining channel ${socket.chatChannel} [id: ${socket.id}]`)
-        })
-        socket.on('test-send-changes', test => {
-            // logger.info(`Board changes from socket [id: ${socket.id}], emitting to topic ${socket.boardChannel}`)
-            gIo.to(socket.chatChannel).emit('test-add-changes', test)
-        })
+        // socket.on('test-set-channel', channel => {
+        //     if (socket.chatChannel === channel) return
+        //     if (socket.chatChannel) {
+        //         socket.leave(socket.chatChannel)
+        //         logger.info(`Socket is leaving channel ${socket.chatChannel} [id: ${socket.id}]`)
+        //     }
+        //     socket.join(channel)
+        //     socket.chatChannel = channel
+        //     logger.debug(`Socket is joining channel ${socket.chatChannel} [id: ${socket.id}]`)
+        // })
+        // socket.on('test-send-changes', test => {
+        //     // logger.info(`Board changes from socket [id: ${socket.id}], emitting to topic ${socket.boardChannel}`)
+        //     gIo.to(socket.chatChannel).emit('test-add-changes', test)
+        // })
 
         socket.on('message-set-channel', channel => {
+            console.log('supposed channel',channel);
             if (socket.messageChannel === channel) return
             if (socket.messageChannel) {
                 socket.leave(socket.messageChannel)
@@ -38,11 +40,14 @@ function setupSocketAPI(http) {
             }
             socket.join(channel)
             socket.messageChannel = channel
+            console.log('joined channel',channel);
             logger.debug(`Socket is joining channel ${socket.messageChannel} [id: ${socket.id}]`)
         });
         
         socket.on('message-send-changes', message => {
-            gIo.to(socket.messageChannel).emit('message-add-changes', message);
+            const ID = new ObjectId()
+            const withIdMessage = {...message,_id:ID}
+            gIo.to(socket.messageChannel).emit('message-add-changes', withIdMessage);
         });
 
         // socket.on('board-set-channel', channel => {

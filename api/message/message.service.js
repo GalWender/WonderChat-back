@@ -8,6 +8,7 @@ async function query(filterBy) {
         const criteria = _buildCriteria(filterBy)
         const collection = await dbService.getCollection('message')
         var messages = await collection.find(criteria).toArray()
+        // console.log('after query',messages);
         // return messages.filter((message)=>message.participantsIds.includes())
         return messages
     } catch (err) {
@@ -82,7 +83,7 @@ function _buildCriteria(filterBy) {
     if (!filterBy) return criteria
     // if (filterBy.maxPrice && filterBy.maxPrice !== 0) criteria.price = { $lte: +filterBy.maxPrice }
     // if (filterBy.userId) criteria.participantsIds = { $in: [filterBy.userId] }
-    if (filterBy.userId) criteria.messageBy = filterBy.userId
+    if (filterBy.chatId) criteria.chatId = filterBy.chatId
     // if (filterBy.labels && filterBy.labels.length > 0) criteria.labels = { $all: filterBy.labels }
     // if (filterBy.inStock) criteria.inStock = { $eq: filterBy.inStock }
     // if (filterBy.inStock) criteria.inStock = { $eq: (filterBy.inStock === 'true') }
