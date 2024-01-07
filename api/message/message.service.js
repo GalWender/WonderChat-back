@@ -10,7 +10,9 @@ async function query(filterBy) {
         var messages = await collection.find(criteria).toArray()
         // console.log('after query',messages);
         // return messages.filter((message)=>message.participantsIds.includes())
-        return messages
+        return messages.map((message) => {
+            return { ...message, createdAt:new Date(message.createdAt) }
+        })
     } catch (err) {
         logger.error('cannot find messages', err)
         throw err

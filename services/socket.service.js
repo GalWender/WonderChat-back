@@ -32,7 +32,6 @@ function setupSocketAPI(http) {
         // })
 
         socket.on('message-set-channel', channel => {
-            console.log('supposed channel',channel);
             if (socket.messageChannel === channel) return
             if (socket.messageChannel) {
                 socket.leave(socket.messageChannel)
@@ -40,7 +39,6 @@ function setupSocketAPI(http) {
             }
             socket.join(channel)
             socket.messageChannel = channel
-            console.log('joined channel',channel);
             logger.debug(`Socket is joining channel ${socket.messageChannel} [id: ${socket.id}]`)
         });
         
