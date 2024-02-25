@@ -48,6 +48,29 @@ function setupSocketAPI(http) {
             gIo.to(socket.messageChannel).emit('message-add-changes', withIdMessage);
         });
 
+        socket.on('channel-set-channel', channel => {
+            if (socket.channelChannel === channel) return
+            if (socket.channelChannel) {
+                socket.leave(socket.channelChannel)
+                logger.info(`Socket is leaving channel ${socket.channelChannel} [id: ${socket.id}]`)
+            }
+            socket.join(channel)
+            socket.channelChannel = channel
+            logger.debug(`Socket is joining channel ${socket.channelChannel} [id: ${socket.id}]`)
+        });
+
+        socket.on('channel-send-changes', async channel => {
+            channel.participantsIds.forEach(async userId => {
+                const socket = await _getUserSocket(userId);
+                if (socket) {
+                    logger.info(`Emitting event: channel-update-changes to user: ${userId} socket [id: ${socket.id}]`);
+                    socket.emit('channel-update-changes', channel);
+                } else {
+                    logger.info(`No active socket for user: ${userId}`);
+                }
+            });
+        });
+
         // socket.on('board-set-channel', channel => {
         //     if (socket.boardChannel === channel) return
         //     if (socket.boardChannel) {

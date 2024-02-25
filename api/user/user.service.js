@@ -116,11 +116,11 @@ function _buildCriteria(filterBy) {
         const txtCriteria = { $regex: filterBy.txt, $options: 'i' }
         criteria.$or = [
             {
-                username: txtCriteria
+                name: txtCriteria
             },
-            {
-                fullname: txtCriteria
-            }
+            // {
+            //     fullname: txtCriteria
+            // }
         ]
     }
     return criteria

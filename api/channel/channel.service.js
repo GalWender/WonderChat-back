@@ -56,7 +56,9 @@ async function add(channel) {
 
 async function update(channel) {
     try {
+        console.log('Original _id:', channel._id);
         const channelId = ObjectId(channel._id)
+        console.log('Converted _id:', channelId);
         delete channel._id
         const collection = await dbService.getCollection('channel')
         await collection.updateOne({ _id: channelId }, { $set: { ...channel } })
