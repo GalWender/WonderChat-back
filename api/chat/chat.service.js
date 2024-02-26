@@ -8,7 +8,6 @@ async function query(filterBy) {
         const criteria = _buildCriteria(filterBy)
         const collection = await dbService.getCollection('chat')
         var chats = await collection.find(criteria).toArray()
-        // return chats.filter((chat)=>chat.participantsIds.includes())
         return chats
     } catch (err) {
         logger.error('cannot find chats', err)
@@ -63,28 +62,10 @@ async function update(chat) {
     }
 }
 
-// async function addMsg(msg) {
-//     try {
-//         var chatId = ObjectId(msg.chatId)
-//         delete msg.chatId
-//         const collection = await dbService.getCollection('chat')
-//         await collection.updateOne({ _id: chatId }, { $push: { msgs: msg } })
-//     } catch (err) {
-//         logger.error(`cannot add message ${msg}`, err)
-//         throw err
-//     }
-// }
-
 function _buildCriteria(filterBy) {
     const criteria = {}
     if (!filterBy) return criteria
-    // if (filterBy.maxPrice && filterBy.maxPrice !== 0) criteria.price = { $lte: +filterBy.maxPrice }
-    // if (filterBy.userId) criteria.participantsIds = { $in: [filterBy.userId] }
     if (filterBy.channelId) criteria.channelId = filterBy.channelId;
-    // if (filterBy.labels && filterBy.labels.length > 0) criteria.labels = { $all: filterBy.labels }
-    // if (filterBy.inStock) criteria.inStock = { $eq: filterBy.inStock }
-    // if (filterBy.inStock) criteria.inStock = { $eq: (filterBy.inStock === 'true') }
-    // if (filterBy.labels)
     return criteria
 }
 
@@ -94,5 +75,4 @@ module.exports = {
     getById,
     add,
     update,
-    // addMsg,
 }

@@ -3,7 +3,6 @@ const authService = require('../api/auth/auth.service')
 
 async function requireAuth(req, res, next) {
   const {loginToken} = req.cookies
-  console.log('loginToken:', loginToken)
   if (!req?.cookies?.loginToken) return res.status(401).send('Not Authenticated')
   const loggedinUser = authService.validateToken(req.cookies.loginToken)
   if (!loggedinUser) return res.status(401).send('Not Authenticated')

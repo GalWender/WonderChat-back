@@ -74,7 +74,6 @@ async function remove(userId) {
 
 async function update(user) {
     try {
-        // peek only updatable fields!
         const userToSave = {
             _id: ObjectId(user._id),
             username: user.username,
@@ -92,7 +91,6 @@ async function update(user) {
 
 async function add(user) {
     try {
-        // peek only updatable fields!
         const userToAdd = {
             _id:user._id,
             username: user.username,
@@ -118,9 +116,6 @@ function _buildCriteria(filterBy) {
             {
                 name: txtCriteria
             },
-            // {
-            //     fullname: txtCriteria
-            // }
         ]
     }
     return criteria

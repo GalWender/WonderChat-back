@@ -8,8 +8,6 @@ async function query(filterBy) {
         const criteria = _buildCriteria(filterBy)
         const collection = await dbService.getCollection('message')
         var messages = await collection.find(criteria).toArray()
-        // console.log('after query',messages);
-        // return messages.filter((message)=>message.participantsIds.includes())
         return messages.map((message) => {
             return { ...message, createdAt:new Date(message.createdAt) }
         })
@@ -66,28 +64,10 @@ async function update(message) {
     }
 }
 
-// async function addMsg(msg) {
-//     try {
-//         var messageId = ObjectId(msg.messageId)
-//         delete msg.messageId
-//         const collection = await dbService.getCollection('message')
-//         await collection.updateOne({ _id: messageId }, { $push: { msgs: msg } })
-//     } catch (err) {
-//         logger.error(`cannot add message ${msg}`, err)
-//         throw err
-//     }
-// }
-
 function _buildCriteria(filterBy) {
     const criteria = {}
     if (!filterBy) return criteria
-    // if (filterBy.maxPrice && filterBy.maxPrice !== 0) criteria.price = { $lte: +filterBy.maxPrice }
-    // if (filterBy.userId) criteria.participantsIds = { $in: [filterBy.userId] }
     if (filterBy.chatId) criteria.chatId = filterBy.chatId
-    // if (filterBy.labels && filterBy.labels.length > 0) criteria.labels = { $all: filterBy.labels }
-    // if (filterBy.inStock) criteria.inStock = { $eq: filterBy.inStock }
-    // if (filterBy.inStock) criteria.inStock = { $eq: (filterBy.inStock === 'true') }
-    // if (filterBy.labels)
     return criteria
 }
 
@@ -97,5 +77,4 @@ module.exports = {
     getById,
     add,
     update,
-    // addMsg,
 }

@@ -56,9 +56,7 @@ async function add(channel) {
 
 async function update(channel) {
     try {
-        console.log('Original _id:', channel._id);
         const channelId = ObjectId(channel._id)
-        console.log('Converted _id:', channelId);
         delete channel._id
         const collection = await dbService.getCollection('channel')
         await collection.updateOne({ _id: channelId }, { $set: { ...channel } })
@@ -69,28 +67,10 @@ async function update(channel) {
     }
 }
 
-// async function addMsg(msg) {
-//     try {
-//         var channelId = ObjectId(msg.channelId)
-//         delete msg.channelId
-//         const collection = await dbService.getCollection('channel')
-//         await collection.updateOne({ _id: channelId }, { $push: { msgs: msg } })
-//     } catch (err) {
-//         logger.error(`cannot add message ${msg}`, err)
-//         throw err
-//     }
-// }
-
 function _buildCriteria(filterBy) {
-    // console.log(filterBy);
     const criteria = {}
     if (!filterBy) return criteria
-    // if (filterBy.maxPrice && filterBy.maxPrice !== 0) criteria.price = { $lte: +filterBy.maxPrice }
     if (filterBy.userId) criteria.participantsIds = { $in: [filterBy.userId] }
-    // if (filterBy.labels && filterBy.labels.length > 0) criteria.labels = { $all: filterBy.labels }
-    // if (filterBy.inStock) criteria.inStock = { $eq: filterBy.inStock }
-    // if (filterBy.inStock) criteria.inStock = { $eq: (filterBy.inStock === 'true') }
-    // if (filterBy.labels)
     return criteria
 }
 
@@ -100,5 +80,4 @@ module.exports = {
     getById,
     add,
     update,
-    // addMsg,
 }

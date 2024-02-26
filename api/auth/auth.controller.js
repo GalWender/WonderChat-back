@@ -14,7 +14,6 @@ async function verifyUsername(req, res) {
 
 async function login(req, res) {
     const { email, password } = req.body
-    console.log('email,password:', email, password)
     try {
         const user = await authService.login(email, password)
         const loginToken = authService.getLoginToken(user)
@@ -30,7 +29,6 @@ async function login(req, res) {
 async function signup(req, res) {
     try {
         const { username, password, name, email, birthday } = req.body
-        console.log(username,password,name,email,birthday);
         const account = await authService.signup(username, password, name, email, birthday)
         logger.debug(`auth.route - new account created: ` + JSON.stringify(account))
         const user = await authService.login(email, password)

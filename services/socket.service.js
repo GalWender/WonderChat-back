@@ -1,6 +1,5 @@
 const { ObjectId } = require('mongodb')
 const logger = require('./logger.service')
-// const boardService = require('../api/board/board.service')
 
 var gIo = null
 
@@ -15,21 +14,6 @@ function setupSocketAPI(http) {
         socket.on('disconnect', () => {
             logger.info(`Socket disconnected [id: ${socket.id}]`)
         })
-
-        // socket.on('test-set-channel', channel => {
-        //     if (socket.chatChannel === channel) return
-        //     if (socket.chatChannel) {
-        //         socket.leave(socket.chatChannel)
-        //         logger.info(`Socket is leaving channel ${socket.chatChannel} [id: ${socket.id}]`)
-        //     }
-        //     socket.join(channel)
-        //     socket.chatChannel = channel
-        //     logger.debug(`Socket is joining channel ${socket.chatChannel} [id: ${socket.id}]`)
-        // })
-        // socket.on('test-send-changes', test => {
-        //     // logger.info(`Board changes from socket [id: ${socket.id}], emitting to topic ${socket.boardChannel}`)
-        //     gIo.to(socket.chatChannel).emit('test-add-changes', test)
-        // })
 
         socket.on('message-set-channel', channel => {
             if (socket.messageChannel === channel) return
@@ -70,36 +54,6 @@ function setupSocketAPI(http) {
                 }
             });
         });
-
-        // socket.on('board-set-channel', channel => {
-        //     if (socket.boardChannel === channel) return
-        //     if (socket.boardChannel) {
-        //         socket.leave(socket.boardChannel)
-        //         logger.info(`Socket is leaving channel ${socket.boardChannel} [id: ${socket.id}]`)
-        //     }
-        //     socket.join(channel)
-        //     socket.boardChannel = channel
-        //     logger.debug(`Socket is joining channel ${socket.boardChannel} [id: ${socket.id}]`)
-        // })
-        // socket.on('board-send-changes', board => {
-        //     logger.info(`Board changes from socket [id: ${socket.id}], emitting to topic ${socket.boardChannel}`)
-        //     gIo.to(socket.boardChannel).emit('board-add-changes', board)
-        // })
-
-        // socket.on('task-set-channel', channel => {
-        //     if (socket.taskChannel === channel) return
-        //     if (socket.taskChannel) {
-        //         socket.leave(socket.taskChannel)
-        //         logger.info(`Socket is leaving channel ${socket.taskChannel} [id: ${socket.id}]`)
-        //     }
-        //     socket.join(channel)
-        //     socket.taskChannel = channel
-        //     logger.debug(`Socket is joining channel ${socket.taskChannel} [id: ${socket.id}]`)
-        // })
-        // socket.on('task-send-changes', task => {
-        //     logger.info(`New chat task from socket [id: ${socket.id}], emitting to topic ${socket.taskChannel}`)
-        //     gIo.to(socket.taskChannel).emit('task-add-changes', task)
-        // })
 
         socket.on('set-user-socket', userId => {
             logger.info(`Setting socket.userId = ${userId} for socket [id: ${socket.id}]`)
@@ -172,13 +126,8 @@ async function _printSockets() {
 }
 
 module.exports = {
-    // set up the sockets service and define the API
     setupSocketAPI,
-    // emit to everyone / everyone in a specific room (label)
     emitTo,
-    // emit to a specific user (if currently active in system)
     emitToUser,
-    // Send to all sockets BUT not the current socket - if found
-    // (otherwise broadcast to a room / to all)
     broadcast,
 }
