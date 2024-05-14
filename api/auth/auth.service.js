@@ -35,8 +35,8 @@ async function signup(username, password, name, email, birthday) {
 
     const hash = await bcrypt.hash(password, saltRounds)
     const signedUser = userService.add({ _id: ID, username, password: hash, name, email, birthday })
-    channelService.add({ logoSrc: "", participantsIds: [ID.toString()], name: "Direct Messages", isDirectMessages: true })
-    // channelService.add({ logoSrc: "", participantsIds: [ID.toString()], name: "First Channel", isDirectMessages: false })
+    // channelService.add({ logoSrc: "", participantsIds: [ID.toString()], name: "Direct Messages", isDirectMessages: true })
+    channelService.add({ logoSrc: "", participantsIds: [ID.toString()], name: "First Channel", isDirectMessages: false })
     return signedUser
 }
 
