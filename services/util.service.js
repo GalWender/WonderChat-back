@@ -1,10 +1,3 @@
-module.exports = {
-    makeId,
-    makeLorem,
-    getRandomIntInclusive,
-    debounce,
-}
-
 function makeId(length = 6) {
     var txt = '';
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -39,3 +32,10 @@ function debounce(func, timeout = 300) {
         timer = setTimeout(() => { func.apply(this, args); }, timeout);
     }
 }
+
+export {
+    makeId,
+    makeLorem,
+    getRandomIntInclusive,
+    debounce,
+};

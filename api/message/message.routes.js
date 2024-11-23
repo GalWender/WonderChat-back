@@ -1,7 +1,8 @@
-const express = require('express')
-const { requireAuth, requireAdmin } = require('../../middlewares/requireAuth.middleware')
-const { log } = require('../../middlewares/logger.middleware')
-const { getMessages, getMessage, addMessage, updateMessage, removeMessage } = require('./message.controller')
+import express from 'express'
+import { requireAuth, requireAdmin } from '../../middlewares/requireAuth.middleware.js'
+import { log } from '../../middlewares/logger.middleware.js'
+import { getMessages, getMessage, addMessage, updateMessage, removeMessage } from './message.controller.js'
+
 const router = express.Router()
 
 router.get('/', log, getMessages)
@@ -10,4 +11,4 @@ router.post('/', addMessage)
 router.put('/:messageId', updateMessage)
 router.delete('/:messageId', removeMessage)
 
-module.exports = router
+export default router

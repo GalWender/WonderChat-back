@@ -1,13 +1,15 @@
-const express = require('express')
-const { requireAuth, requireAdmin } = require('../../middlewares/requireAuth.middleware')
-const { log } = require('../../middlewares/logger.middleware')
-const { getChats, getChat, addChat, updateChat, removeChat } = require('./chat.controller')
+import express from 'express'
+import { requireAuth, requireAdmin } from '../../middlewares/requireAuth.middleware.js'
+import { log } from '../../middlewares/logger.middleware.js'
+import { getChats, getChat, addChat, updateChat, removeChat } from './chat.controller.js'
+
 const router = express.Router()
 
-router.get('/', log, getChats)
-router.get('/:chatId', log, getChat)
-router.post('/', addChat)
-router.put('/:chatId', updateChat)
-router.delete('/:chatId', removeChat)
+// All chat routes require authentication
+router.get('/', requireAuth, log, getChats)
+router.get('/:chatId', requireAuth, log, getChat)
+router.post('/', requireAuth, log, addChat)
+router.put('/:chatId', requireAuth, log, updateChat)
+router.delete('/:chatId', requireAuth, log, removeChat)
 
-module.exports = router
+export default router

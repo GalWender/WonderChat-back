@@ -1,6 +1,5 @@
-const fs = require('fs')
-const asyncLocalStorage = require('./als.service')
-
+import fs from 'fs'
+import asyncLocalStorage from './als.service.js'
 
 const logsDir = './logs'
 if (!fs.existsSync(logsDir)) {
@@ -18,33 +17,49 @@ function isError(e) {
 }
 
 function doLog(level, ...args) {
+    try {
+        const strs = args.map(arg =>
+            (typeof arg === 'string' || isError(arg)) ? arg : JSON.stringify(arg)
+        )
 
-    const strs = args.map(arg =>
-        (typeof arg === 'string' || isError(arg)) ? arg : JSON.stringify(arg)
-    )
-
-    var line = strs.join(' | ')
-    const store = asyncLocalStorage.getStore()
-    const userId = store?.loggedinUser?._id
-    const str = userId ? `(userId: ${userId})` : ''
-    line = `${getTime()} - ${level} - ${line} ${str}\n`
-    fs.appendFile('./logs/backend.log', line, (err) =>{
-        if (err) console.log('FATAL: cannot write to log file')
-    })
+        var line = strs.join(' | ')
+        let store
+        try {
+            store = asyncLocalStorage.getStore()
+        } catch (err) {
+            store = null
+        }
+        const userId = store?.loggedinUser?._id
+        const str = userId ? `(userId: ${userId})` : ''
+        line = `${getTime()} - ${level} - ${line} ${str}\n`
+        fs.appendFile('./logs/backend.log', line, (err) => {
+            if (err) console.log('FATAL ERROR WRITING TO LOGGER FILE')
+        })
+    } catch (err) {
+        console.log('LOGGER ERROR:', err)
+    }
 }
 
-module.exports = {
-    debug(...args) {
-        if (process.env.NODE_NEV === 'production') return
-        doLog('DEBUG', ...args)
-    },
-    info(...args) {
-        doLog('INFO', ...args)
-    },
-    warn(...args) {
-        doLog('WARN', ...args)
-    },
-    error(...args) {
-        doLog('ERROR', ...args)
-    }
+function debug(...args) {
+    if (process.env.NODE_ENV === 'production') return
+    doLog('DEBUG', ...args)
+}
+
+function info(...args) {
+    doLog('INFO', ...args)
+}
+
+function warn(...args) {
+    doLog('WARN', ...args)
+}
+
+function error(...args) {
+    doLog('ERROR', ...args)
+}
+
+export default {
+    debug,
+    info,
+    warn,
+    error
 }

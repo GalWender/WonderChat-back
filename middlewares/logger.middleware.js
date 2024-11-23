@@ -1,10 +1,10 @@
-const logger = require('../services/logger.service')
+import logger from '../services/logger.service.js';
 
 async function log(req, res, next) {
-  logger.info('Req was made')
-  next()
+  logger.info('Req was made');
+  next();
 }
 
-module.exports = {
+export {
   log
-}
+};
